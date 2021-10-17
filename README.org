@@ -12,7 +12,7 @@ Then do =(asdf:load-system :cl-translit)=.
 
 And you're good to go! Get your first transliteration there:
 #+begin_src lisp
-  (cyr-to-url "Зевес тогді кружав сивуху і оселедцем заїдав;")
+  (translit:cyr-to-url "Зевес тогді кружав сивуху і оселедцем заїдав;")
   ;; => "Zeves toghdi kruzhav syvukhu i oseledcem zajidav;"
 #+end_src
 
