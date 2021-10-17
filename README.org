@@ -1,0 +1,50 @@
+#+TITLE:cl-translit -- Common Lisp Cyrillic/Latin alphabet transliteration library
+
+This is a small utility to transliterate Cyrillic text to Latin alphabet and transliterate it back to Cyrillics. The only encoding supported at the moment is cur2url, the code for which is basically rewritten line-by-line from Python (see [[https://github.com/matan-bebop/translit][translit]]).
+
+* Getting Started
+Clone the repo to somewhere ASDF can discover it:
+#+begin_src sh
+  # This implies that ~/common-lisp/ is reachable for ASDF
+  git clone https://github.com/aartaka/cl-translit ~/common-lisp/cl-translit
+#+end_src
+Then do =(asdf:load-system :cl-translit)=.
+
+And you're good to go! Get your first transliteration there:
+#+begin_src lisp
+  (cyr-to-url "Зевес тогді кружав сивуху і оселедцем заїдав;")
+  ;; => "Zeves toghdi kruzhav syvukhu i oseledcem zajidav;"
+#+end_src
+
+* Functions
+** =cyr2url= (aliases: =cyr-to-url=, =cyr->url=)
+Arglist is
+#+begin_src
+string &key (consonants *consonants*) (softeners *softeners*) (vowels *vowels*)
+         (additional-translations nil)
+         (apostrophe-char *apostrophe-char*) (stop-char *stop-char*)
+         (dictionary (build-encode-dict consonants softeners vowels
+                                        additional-translations apostrophe-char stop-char))  
+#+end_src
+Docstring:
+
+Translate a Cyrillic text to Latin URL-compatible text.
+
+CONSONANTS, SOFTENERS, VOWELS, and ADDITIONAL-TRANSLATIONS should be alists from Cyrillic characters to Latinic ones. Default values are `*consonants*`, `*softeners*`, `*vowels*`, and nil respectively.
+APOSTROPHE-CHAR and STOP-CHAR are characters/strings to insert in special cases. Defaults to `*apostrophe-char*' and `*stop-char*'. See the respective documentation for when those are inserted.
+** =url2cyr= (aliases: =url-to-cyr=, =url->cyr=)
+Arglist is
+#+begin_src
+string &key (consonants *consonants*) (softeners *softeners*) (vowels *vowels*)
+         (additional-translations nil)
+         (apostrophe-char *apostrophe-char*) (stop-char *stop-char*)
+         (dictionary (build-decode-dict consonants softeners vowels
+                                        additional-translations apostrophe-char stop-char))  
+#+end_src
+Docstring:
+
+Translate a Latin URL-compatible text to Cyrillic text.
+
+Arguments are the same as for `cyr2url', except that DICTIONARY should be a decoding dictionary (see `build-decode-dict').
+** build-(decode|encode)-dict
+Those simply build a dictionary (hash-table) out of the argument they are provided. As you seen earlier, those are used in en/decoding functions. See the respective docstrings for argument explanations.
